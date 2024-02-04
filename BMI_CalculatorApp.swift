@@ -21,14 +21,14 @@ class BMICalculatorViewModel: ObservableObject {
     func calculateBMI() {
         let weightInKgs: Double
         if let weightValue = Double(weight) {
-            weightInKgs = selectedWeightUnit == 0 ? weightValue * 0.453592 : weightValue
+            weightInKgs = selectedWeightUnit == 1 ? weightValue * 0.453592 : weightValue
         } else {
             showingAlert = true
             return
         }
 
         let heightInMeters: Double
-        if selectedHeightUnit == 1 {
+        if selectedHeightUnit == 0 {
             guard let heightValue = Double(height) else {
                 showingAlert = true
                 return
@@ -57,13 +57,13 @@ struct BMIContentView: View {
                 .font(.largeTitle)
                 .padding(.bottom, 20)
 
-            TextField(viewModel.selectedWeightUnit == 0 ? "Weight (lbs)" : "Weight (kgs)", text: $viewModel.weight)
+            TextField(viewModel.selectedWeightUnit == 0 ? "Weight (kgs)" : "Weight (lbs)", text: $viewModel.weight)
                 .keyboardType(.decimalPad)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
 
             HStack {
-                if viewModel.selectedHeightUnit == 1 {
+                if viewModel.selectedHeightUnit == 0 {
                     TextField("Height (cm)", text: $viewModel.height)
                         .keyboardType(.decimalPad)
                 } else {
@@ -78,15 +78,15 @@ struct BMIContentView: View {
             .padding()
 
             Picker("Weight Unit", selection: $viewModel.selectedWeightUnit) {
-                Text("kgs").tag(1)
-                Text("lbs").tag(0)
+                Text("lbs").tag(1)
+                Text("kgs").tag(0)
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
 
             Picker("Height Unit", selection: $viewModel.selectedHeightUnit) {
-                Text("cm").tag(1)
-                Text("ft").tag(0)
+                Text("ft").tag(1)
+                Text("cm").tag(0)
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding()
